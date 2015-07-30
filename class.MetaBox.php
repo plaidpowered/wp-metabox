@@ -139,7 +139,8 @@ class MetaBox {
         
         $formoutput .= wp_nonce_field("MetaBox/save", "{$this->id}_nonce", true, false);
         
-        $formoutput = apply_filters("MetaBox/form_output", $formoutput, $this);
+        $formoutput = apply_filters("MetaBox/form_output/{$this->id}", $formoutput, $this, $post);
+        $formoutput = apply_filters("MetaBox/form_output", $formoutput, $this, $post);
         
         echo $formoutput;
         

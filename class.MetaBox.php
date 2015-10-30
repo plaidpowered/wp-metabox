@@ -116,9 +116,9 @@ class MetaBox {
             $id = $this->field_name($field);
             
             $value = isset($meta[$name]) ? $meta[$name] : $field["value"];
-            $value = \apply_filters("MetaBox/render_field/{$field["type"]}/value", $value, $field);
+            $value = \apply_filters("MetaBox/render_field/{$field["type"]}/value", $value, $field, $post);
             
-            $template = \apply_filters("MetaBox/render_field/{$field["type"]}/template", self::FIELD_TEMPLATE, $field);
+            $template = \apply_filters("MetaBox/render_field/{$field["type"]}/template", self::FIELD_TEMPLATE, $field, $post);
             
             if (is_array($value))
                 $value = current($value);
@@ -129,9 +129,9 @@ class MetaBox {
                               $value,
                               self::split_to_input($field["attrs"]));
           
-            $output = apply_filters("MetaBox/render_field/output", $output, $field, $this);
-            $output = apply_filters("MetaBox/render_field/{$field["type"]}", $output, $field, $this);
-            $output = apply_filters("MetaBox/render_field/{$this->id}/$name", $output, $field, $this);
+            $output = apply_filters("MetaBox/render_field/output", $output, $field, $this, $post);
+            $output = apply_filters("MetaBox/render_field/{$field["type"]}", $output, $field, $this, $post);
+            $output = apply_filters("MetaBox/render_field/{$this->id}/$name", $output, $field, $this, $post);
                                 
             $formoutput .= $output;
           

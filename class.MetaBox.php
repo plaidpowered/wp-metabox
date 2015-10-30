@@ -16,6 +16,10 @@ class MetaBox {
         
     public function __construct($id, $title, $atts = array()) {
         
+        $abort = apply_filters("MetaBox/disable_metabox/$id", false);
+        if ($abort)
+            return false;
+        
         $this->fields = array();
         
         $post_types = isset($atts["post_types"]) ? $atts["post_types"] : "post";
@@ -112,7 +116,7 @@ class MetaBox {
         
         foreach($this->fields as $name => $field) 
         {
-            $field = \apply_filters("MetaBox/render_field/properties", $field);
+            $field = \apply_filters("MetaBox/render_field/properties", $field, $post);
             $id = $this->field_name($field);
             
             $value = isset($meta[$name]) ? $meta[$name] : $field["value"];
@@ -201,15 +205,16 @@ class MetaBox {
                         
             $value = filter_input(INPUT_POST, $id, $filter);
             
-            $value = apply_filters("MetaBox/save_field", $value, $field, $this);
-            $value = apply_filters("MetaBox/save_field/{$field["type"]}", $value, $field, $this);
-            $value = apply_filters("MetaBox/save_field/{$this->id}/{$field["name"]}", $value, $field, $this);
+            $value = apply_filters("MetaBox/save_field", $value, $field, $this, $post_id);
+            $value = apply_filters("MetaBox/save_field/{$field["type"]}", $value, $field, $this, $post_id);
+            $value = apply_filters("MetaBox/save_field/{$this->id}/{$field["name"]}", $value, $field, $this, $post_id);
             
-            do_action("MetaBox/before_field_saved", $this, $field, $value, $post_id);
+            do_action("MetaBox/before_field_saved", $value, $field, $this, $post_id);
+            do_action("MetaBox/before_field_saved/{$field["type"]}", $value, $field, $this, $post_id);
             
             $meta_id = update_post_meta($post_id, $name, $value);
             
-            do_action("MetaBox/after_field_saved", $this, $field, $value, $post_id);
+            do_action("MetaBox/after_field_saved", $meta_id, $value, $field, $this, $post_id);
             
         }
         

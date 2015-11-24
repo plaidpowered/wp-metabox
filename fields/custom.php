@@ -4,8 +4,10 @@ namespace OUW\MetaBox;
 
 function custom_template($template, $field, $post, $value) 
 {
+    $empty_label = isset($field["attrs"]["empty_label"]) ? $field["attrs"]["empty_label"] : "";
+    
     $posts = get_posts(["post_type"=>$field["attrs"]["post_type"],"nopaging"=>true]);
-    $options = "";
+    $options = sprintf('<option value="">%s</option>', $empty_label);
     foreach($posts as $option) {
         $options .= sprintf('<option value="%d">%s</option>', $option->ID, $option->post_title);
     }

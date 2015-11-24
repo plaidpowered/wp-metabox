@@ -131,7 +131,7 @@ class MetaBox {
             if (!isset($field["attrs"]["label"]) || $field["attrs"]["label"] !== false)
                 $template_inside = self::FIELD_TEMPLATE_LABEL . $template_inside;
             $template = sprintf(self::FIELD_TEMPLATE, $template_inside);
-            $template = \apply_filters("MetaBox/render_field/{$field["type"]}/template", $template, $field, $post);
+            $template = \apply_filters("MetaBox/render_field/{$field["type"]}/template", $template, $field, $post, $value);
             
             
             if (is_array($value))
@@ -223,7 +223,10 @@ class MetaBox {
             
             $filter = apply_filters("MetaBox/field_filter/{$field["type"]}", FILTER_SANITIZE_STRING);
                         
-            $value = filter_input(INPUT_POST, $id, $filter);
+            $value = $_POST[$id];
+            
+            if ($filter!==false)
+                $value = filter_var($value, $filter);
             
             $value = apply_filters("MetaBox/save_field", $value, $field, $this, $post_id);
             $value = apply_filters("MetaBox/save_field/{$field["type"]}", $value, $field, $this, $post_id);

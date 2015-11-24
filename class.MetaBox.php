@@ -12,7 +12,9 @@ class MetaBox {
     private $fields, $post_types, $perms;    
     public $id, $title, $atts;
     
-    const FIELD_TEMPLATE  = '<p class="field"><label for="%1$s">%3$s</label><input id="%1$s" name="%2$s" value="%4$s" %5$s></p>';
+    const FIELD_TEMPLATE  = '<p class="field">%s</p>';
+    const FIELD_TEMPLATE_LABEL = '<label for="%1$s">%3$s</label>';
+    const FIELD_TEMPLATE_INPUT = '<input id="%1$s" name="%2$s" value="%4$s" %5$s>';
         
     public function __construct($id, $title, $atts = array()) {
         
@@ -46,8 +48,10 @@ class MetaBox {
                 $this->perms[$post_type] = "edit_{$post_type}";
         }
         
-        add_action( 'add_meta_boxes', array($this, 'build'));
-        add_action( 'save_post', array($this, 'save'));
+        add_action('add_meta_boxes', array($this, 'build'));
+        add_action('save_post', array($this, 'save'));
+        
+        add_action('edit_form_after_title', array($this, 'deck_meta'));
         
     }
     
@@ -122,7 +126,13 @@ class MetaBox {
             $value = isset($meta[$name]) ? $meta[$name] : $field["value"];
             $value = \apply_filters("MetaBox/render_field/{$field["type"]}/value", $value, $field, $post);
             
-            $template = \apply_filters("MetaBox/render_field/{$field["type"]}/template", self::FIELD_TEMPLATE, $field, $post);
+            $template = self::FIELD_TEMPLATE;
+            $template_inside = self::FIELD_TEMPLATE_INPUT;
+            if (!isset($field["attrs"]["label"]) || $field["attrs"]["label"] !== false)
+                $template_inside = self::FIELD_TEMPLATE_LABEL . $template_inside;
+            $template = sprintf(self::FIELD_TEMPLATE, $template_inside);
+            $template = \apply_filters("MetaBox/render_field/{$field["type"]}/template", $template, $field, $post);
+            
             
             if (is_array($value))
                 $value = current($value);
@@ -150,6 +160,16 @@ class MetaBox {
         
         \do_action("MetaBox/after_render", $this, $post);        
         
+        
+    }
+    
+    public function deck_meta() {
+             
+        global $post, $wp_meta_boxes;
+        
+        do_meta_boxes(get_current_screen(), 'deck', $post);
+        
+        unset($wp_meta_boxes[get_post_type($post)]['deck']);
         
     }
     

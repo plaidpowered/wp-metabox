@@ -2,18 +2,41 @@
 
 namespace OUW\MetaBox;
 
+function datetime_convert($meta_value)
+{
+    preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $meta_value, $date);
+    preg_match('/[0-9]{2}:[0-9]{2}:[0-9]{2}/', $meta_value, $time);
 
-function datetime_template($template, $field, $post, $value) {
+    $date = !empty($date) ? $date[0] : "";
+    $time = !empty($time) ? $time[0] : "";
+    
+    return array($date, $time, 
+                 "date" => $date, 
+                 "time" => $time, 
+                 "datetime" => trim("$date $time"),
+                 "unixtime" => strtotime($meta_value));
+}
+
+function datetime_format($datetime, $datef="F j", $timef="h:i a") 
+{
+
+    $date = array();
+    if (!empty($datetime["date"]))
+        $date[] = date($datef, $datetime["unixtime"]);
+    if (!empty($datetime["time"]))
+        $date[] = date($timef, $datetime["unixtime"]);
+    $date = implode(", ", $date);
+    
+    return $date;
+}
+
+function datetime_template($template, $field, $post, $value) 
+{
     
     
     if (!empty($value)) 
     {
-        preg_match('/[0-9]{4}-[0-9]{2}-[0-9]{2}/', $value[0], $date);
-        preg_match('/[0-9]{2}:[0-9]{2}:[0-9]{2}/', $value[0], $time);
-        
-        $date = !empty($date) ? $date[0] : "";
-        $time = !empty($time) ? $time[0] : "";
-            
+        list($date, $time) = datetime_convert($value[0]);
     }
     else
     {
@@ -31,7 +54,8 @@ function datetime_template($template, $field, $post, $value) {
 }
 \add_filter("MetaBox/render_field/datetime/template", __NAMESPACE__."\datetime_template", 9, 4);
 
-function datetime_save_value($value) {
+function datetime_save_value($value) 
+{
     
     $datetime = array();
     if (!empty($value["date"])) {

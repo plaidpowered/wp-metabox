@@ -9,3 +9,42 @@
 #post-body-content .postbox p.field > input {
     flex:0 2 auto;
 }
+
+ul.media-filenames li {
+    display:inline-block;
+    width:150px;
+    height:150px;
+    padding:0;
+    margin-right:5px;
+    border:1px solid #999;
+}
+ul.media-filenames li figure {
+    width:150px;
+    height:150px;
+    background:#efefef;
+    position:relative;
+    margin:0;
+    padding:0;
+    text-align:center;
+}
+ul.media-filenames li figure img {
+    margin:0;
+    padding:0;
+    display:block;
+    position:absolute;
+    top:50%;
+    left:50%;
+    -webkit-transform:translate(-50%, -50%);
+    transform:translate(-50%, -50%);
+}
+ul.media-filenames li figure figcaption {
+    position:absolute;
+    width:140px;
+    left:0;
+    bottom:0;
+    word-break: break-all;
+    font-size:12px;
+    background:rgba(255,255,255,0.8);
+    padding:5px;
+    border-top:1px solid #999;
+}

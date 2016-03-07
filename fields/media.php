@@ -20,13 +20,15 @@ function media_template($template, $field, $post, $value)
     {
         foreach($value as $attId)
         {
-            //$att = basename(get_attached_file($attId));
+            if (!empty($attId)) {
+                //$att = basename(get_attached_file($attId));
 
-            $image = wp_get_attachment_image($attId, 'thumbnail', true);
-            $filename = basename(get_attached_file($attId));
+                $image = wp_get_attachment_image($attId, 'thumbnail', true);
+                $filename = basename(get_attached_file($attId));
 
-            $attachments .= "<li data-id='{$attId}'><figure>$image<figcaption>$filename</figcaption></figure></li>";
-            $attachmentIds .= sprintf('{%s}', $attId);
+                $attachments .= "<li data-id='{$attId}'><figure>$image<figcaption>$filename</figcaption></figure></li>";
+                $attachmentIds .= sprintf('{%s}', $attId);
+            }
         }
     }
 

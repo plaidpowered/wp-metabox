@@ -223,7 +223,7 @@ class MetaBox {
 
             $filter = apply_filters("MetaBox/field_filter/{$field["type"]}", FILTER_SANITIZE_STRING);
 
-            $value = isset($_POST[$id]) ? $_POST[$id] : null;
+            $value = $_POST[$id];
 
             if ($filter!==false)
                 $value = filter_var($value, $filter);

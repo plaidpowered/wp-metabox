@@ -238,6 +238,7 @@ class MetaBox {
             $meta_id = update_post_meta($post_id, $name, $value);
 
             do_action("MetaBox/after_field_saved", $meta_id, $value, $field, $this, $post_id);
+            do_action("MetaBox/after_field_saved-$name", $value, $post_id, $field, $this, $meta_id);
 
         }
 

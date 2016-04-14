@@ -179,6 +179,8 @@ class MetaBox {
         foreach($attrs as $key => $value)
         {
             $key = sanitize_title($key);
+            if (is_array($value))
+                continue;
             if (!is_bool($value))
                 $output .= ' ' . $key . '="' . esc_attr($value) . '"';
             else if ($value === true)

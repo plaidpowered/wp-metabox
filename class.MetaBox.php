@@ -116,6 +116,9 @@ class MetaBox {
 
         \do_action("MetaBox/before_render", $this, $post);
 
+        if (isset($this->atts["description"]))
+            echo '<p>' . $this->atts["description"] . '</p>';
+
         $meta = \get_post_meta($post->ID);
 
         foreach($this->fields as $name => $field)

@@ -136,6 +136,8 @@ class MetaBox {
             $template = sprintf(self::FIELD_TEMPLATE, $template_inside);
             $template = \apply_filters("MetaBox/render_field/{$field["type"]}/template", $template, $field, $post, $value);
 
+            $field_attrs = empty($field["attrs"]) ? array() : $field["attrs"];
+
 
             if (is_array($value))
                 $value = current($value);
@@ -144,7 +146,7 @@ class MetaBox {
                               $id,
                               $field["label"],
                               $value,
-                              self::split_to_input($field["attrs"]));
+                              self::split_to_input($field_attrs));
 
             $output = apply_filters("MetaBox/render_field/output", $output, $field, $this, $post);
             $output = apply_filters("MetaBox/render_field/{$field["type"]}", $output, $field, $this, $post);

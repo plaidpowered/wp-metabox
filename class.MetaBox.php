@@ -218,7 +218,7 @@ class MetaBox {
         if (!$post)
             return;
 
-        if (!current_user_can($this->perms[$post->post_type], $post_id))
+        if (!isset($this->perms[$post->post_type]) || !current_user_can($this->perms[$post->post_type], $post_id))
             return;
 
         foreach($this->fields as $name => $field)

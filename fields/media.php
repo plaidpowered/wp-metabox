@@ -1,8 +1,6 @@
 <?php
 
-namespace OUW\MetaBox;
-
-use \OUW as OUW;
+namespace Metabox;
 
 function media_template($template, $field, $post, $value)
 {
@@ -42,7 +40,7 @@ function media_template($template, $field, $post, $value)
         </div>';
 
 }
-\add_filter("MetaBox/render_field/media/template", __NAMESPACE__.'\media_template', 9, 4);
+\add_filter("Metabox/render_field/media/template", __NAMESPACE__.'\media_template', 9, 4);
 
 function media_save_value($value)
 {
@@ -52,7 +50,7 @@ function media_save_value($value)
     return $values;
 
 }
-\add_filter("MetaBox/save_field/media", __NAMESPACE__."\media_save_value", 9, 1);
+\add_filter("Metabox/save_field/media", __NAMESPACE__."\media_save_value", 9, 1);
 
 function get_post_media($post_id, $key, $size="thumbnail", $attrs=array())
 {

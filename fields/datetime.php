@@ -1,6 +1,6 @@
 <?php
 
-namespace OUW\MetaBox;
+namespace Metabox;
 
 function datetime_convert($meta_value)
 {
@@ -52,7 +52,7 @@ function datetime_template($template, $field, $post, $value)
         </p>';
     
 }
-\add_filter("MetaBox/render_field/datetime/template", __NAMESPACE__."\datetime_template", 9, 4);
+\add_filter("Metabox/render_field/datetime/template", __NAMESPACE__."\datetime_template", 9, 4);
 
 function datetime_save_value($value) 
 {
@@ -67,6 +67,6 @@ function datetime_save_value($value)
     return implode(" ", $datetime);
     
 }
-\add_filter("MetaBox/save_field/datetime", __NAMESPACE__."\datetime_save_value", 9, 1);
+\add_filter("Metabox/save_field/datetime", __NAMESPACE__."\datetime_save_value", 9, 1);
 
-\add_filter("MetaBox/field_filter/datetime", "__return_false");
+\add_filter("Metabox/field_filter/datetime", "__return_false");

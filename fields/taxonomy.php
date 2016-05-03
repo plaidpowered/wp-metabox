@@ -1,6 +1,6 @@
 <?php
 
-namespace OUW\MetaBox;
+namespace Metabox;
 
 function taxonomy_value($value) 
 {
@@ -8,7 +8,7 @@ function taxonomy_value($value)
     return !empty($value[0]) && $value[0] === "yes" ? 'checked="checked"' : '';
     
 }
-\add_filter("MetaBox/render_field/taxonomy/value", __NAMESPACE__.'\taxonomy_value', 9, 1);
+\add_filter("Metabox/render_field/taxonomy/value", __NAMESPACE__.'\taxonomy_value', 9, 1);
 
 function taxonomy_template($template, $field, $post) 
 {
@@ -44,7 +44,7 @@ function taxonomy_template($template, $field, $post)
         </p>';
     
 }
-\add_filter("MetaBox/render_field/taxonomy/template", __NAMESPACE__.'\taxonomy_template', 9, 3);
+\add_filter("Metabox/render_field/taxonomy/template", __NAMESPACE__.'\taxonomy_template', 9, 3);
 
 function taxonomy_save_value($value, $field, $metabox, $post_id) 
 {
@@ -79,4 +79,4 @@ function taxonomy_save_value($value, $field, $metabox, $post_id)
     
     return $terms;
 }
-\add_filter("MetaBox/save_field/taxonomy", __NAMESPACE__.'\taxonomy_save_value', 9, 4);
+\add_filter("Metabox/save_field/taxonomy", __NAMESPACE__.'\taxonomy_save_value', 9, 4);

@@ -1,6 +1,6 @@
 <?php
 
-namespace OUW\MetaBox;
+namespace Metabox;
 
 function custom_template($template, $field, $post, $value) 
 {
@@ -21,5 +21,5 @@ function custom_template($template, $field, $post, $value)
         </p>';
     
 }
-\add_filter("MetaBox/render_field/custom/template", __NAMESPACE__.'\custom_template', 9, 4);
+\add_filter("Metabox/render_field/custom/template", __NAMESPACE__.'\custom_template', 9, 4);
 

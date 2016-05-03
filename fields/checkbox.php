@@ -1,13 +1,13 @@
 <?php
 
-namespace OUW\MetaBox;
+namespace Metabox;
 
 function checkbox_value($value) {
                 
     return !empty($value[0]) && $value[0] === "yes" ? 'checked="checked"' : '';
     
 }
-\add_filter("MetaBox/render_field/checkbox/value", __NAMESPACE__."\checkbox_value", 9, 1);
+\add_filter("Metabox/render_field/checkbox/value", __NAMESPACE__."\checkbox_value", 9, 1);
 
 function checkbox_template($template) {
     
@@ -17,11 +17,11 @@ function checkbox_template($template) {
         </p>';
     
 }
-\add_filter("MetaBox/render_field/checkbox/template", __NAMESPACE__."\checkbox_template", 9, 1);
+\add_filter("Metabox/render_field/checkbox/template", __NAMESPACE__."\checkbox_template", 9, 1);
 
 function checkbox_save_value($value) {
     
     return !empty($value) ? "yes" : "no";
     
 }
-\add_filter("MetaBox/save_field/checkbox", __NAMESPACE__."\checkbox_save_value", 9, 1);
+\add_filter("Metabox/save_field/checkbox", __NAMESPACE__."\checkbox_save_value", 9, 1);

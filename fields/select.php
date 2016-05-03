@@ -1,6 +1,6 @@
 <?php
 
-namespace OUW\MetaBox;
+namespace Metabox;
 
 function select_template($template, $field, $post, $value)
 {
@@ -32,4 +32,4 @@ function select_template($template, $field, $post, $value)
         </p>';
 
 }
-\add_filter("MetaBox/render_field/select/template", __NAMESPACE__.'\select_template', 9, 4);
+\add_filter("Metabox/render_field/select/template", __NAMESPACE__.'\select_template', 9, 4);

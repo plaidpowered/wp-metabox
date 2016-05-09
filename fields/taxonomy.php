@@ -1,6 +1,6 @@
 <?php
 
-namespace Metabox;
+namespace WP_Metabox;
 
 function taxonomy_value($value)
 {
@@ -48,7 +48,7 @@ function taxonomy_template($template, $field, $post)
 
 function taxonomy_save_value($value, $field, $metabox, $post_id)
 {
-    
+
     if (isset($field["attrs"]["multiple"]) && $field["attrs"]["multiple"] === false)
     {
 

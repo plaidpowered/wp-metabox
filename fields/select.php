@@ -1,6 +1,6 @@
 <?php
 
-namespace Metabox;
+namespace WP_Metabox;
 
 function select_template($template, $field, $post, $value)
 {

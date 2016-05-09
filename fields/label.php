@@ -1,6 +1,6 @@
 <?php
 
-namespace Metabox;
+namespace WP_Metabox;
 
 function label_template($template) {
 

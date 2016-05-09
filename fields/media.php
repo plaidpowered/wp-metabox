@@ -1,12 +1,12 @@
 <?php
 
-namespace Metabox;
+namespace WP_Metabox;
 
 function media_template($template, $field, $post, $value)
 {
 
     wp_enqueue_media();
-    wp_enqueue_script('metabox-media-selector', OUW\theme_url(__DIR__."/media.js"), array("jquery"), null, true);
+    wp_enqueue_script('metabox-media-selector', theme_url(__DIR__."/media.js"), array("jquery"), null, true);
 
     if (!empty($value)) {
         $value = unserialize($value[0]);

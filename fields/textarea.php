@@ -1,6 +1,6 @@
 <?php
 
-namespace Metabox;
+namespace WP_Metabox;
 
 add_filter("Metabox/render_field/textarea/value", function ($value) {
 

@@ -14,9 +14,14 @@ function taxonomy_template($template, $field, $post)
 {
     if (isset($field["attrs"]["multiple"]) && $field["attrs"]["multiple"] === false)
     {
-        $my_terms = wp_get_object_terms($post->ID, $field["attrs"]["taxonomy"], array('fields'=>'ids'));
+        $my_terms = wp_get_object_terms($post->ID,
+            $field["attrs"]["taxonomy"],
+            array('fields'=>'ids', 'orderby'=>'slug'));
 
-        $terms = get_terms($field["attrs"]["taxonomy"], array('hide_empty' => false));
+        $terms = get_terms($field["attrs"]["taxonomy"], array(
+            'hide_empty' => false,
+            'orderby' => 'slug'
+        ));
         $template = '<select id="%1$s" name="%2$s" class="widefat">';
         $template .= '<option value="">(none)</option>';
         foreach($terms as $term)
@@ -39,7 +44,7 @@ function taxonomy_template($template, $field, $post)
 
     return '
         <p class="field">
-            <label for="%1$s">%3$s</label>
+            '.Metabox::FIELD_TEMPLATE_LABEL.'
             '.$template.'
         </p>';
 

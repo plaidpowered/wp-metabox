@@ -46,7 +46,7 @@ function datetime_template($template, $field, $post, $value)
 
     return '
         <p class="field">
-            <label for="%1$s">%3$s</label>
+            '.Metabox::FIELD_TEMPLATE_LABEL.'
             <input id="%1$s_date" name="%2$s[date]" type="date" class="widefat" value="'.$date.'" placeholder="Date">
             <input id="%1$s_time" name="%2$s[time]" type="time" class="widefat" value="'.$time.'" placeholder="Time">
         </p>';

@@ -11,15 +11,15 @@ add_filter("Metabox/render_field/textarea/value", function ($value) {
 
 });
 
-function textarea_template($template, $field, $post, $value)
+function textarea_template()
 {
     return '
         <p class="field">
-            <label for="%1$s">%3$s</label>
+            '.Metabox::FIELD_TEMPLATE_LABEL.'
             <textarea name="%2$s" id="%1$s" class="widefat">%4$s</textarea>
         </p>';
 }
-\add_filter("Metabox/render_field/textarea/template", __NAMESPACE__.'\textarea_template', 9, 4);
+\add_filter("Metabox/render_field/textarea/template", __NAMESPACE__.'\textarea_template', 9, 0);
 
 function textarea_save_value($value) {
 

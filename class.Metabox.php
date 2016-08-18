@@ -12,9 +12,10 @@ class Metabox {
     private $fields, $post_types, $perms;
     public $id, $title, $atts;
 
-    const FIELD_TEMPLATE  = '<p class="field">%s</p>';
+    const FIELD_TEMPLATE       = '<p class="field">%s</p>';
     const FIELD_TEMPLATE_LABEL = '<label for="%1$s">%3$s</label>';
     const FIELD_TEMPLATE_INPUT = '<input id="%1$s" name="%2$s" value="%4$s" %5$s>';
+    const FIELD_TEMPLATE_DESC  = '<small>%6$s</small>';
 
     public function __construct($id, $title, $atts = array()) {
 
@@ -129,10 +130,16 @@ class Metabox {
             $value = isset($meta[$name]) ? $meta[$name] : $field["value"];
             $value = \apply_filters("Metabox/render_field/{$field["type"]}/value", $value, $field, $post);
 
+            $desc = isset($field["attrs"]["desc"]) ? $field["attrs"]["desc"] : "";
+            $desc = \apply_filters("Metabox/render_field/{$field["type"]}/desc", $desc, $field, $post);
+
             $template = self::FIELD_TEMPLATE;
             $template_inside = self::FIELD_TEMPLATE_INPUT;
             if (!isset($field["attrs"]["label"]) || $field["attrs"]["label"] !== false)
                 $template_inside = self::FIELD_TEMPLATE_LABEL . $template_inside;
+            if (!isset($field["attrs"]["desc"]) || $field["attrs"]["desc"] !== false)
+                $template_inside .= self::FIELD_TEMPLATE_DESC;
+
             $template = sprintf(self::FIELD_TEMPLATE, $template_inside);
             $template = \apply_filters("Metabox/render_field/{$field["type"]}/template", $template, $field, $post, $value);
 
@@ -146,7 +153,8 @@ class Metabox {
                               $id,
                               $field["label"],
                               $value,
-                              self::split_to_input($field_attrs));
+                              self::split_to_input($field_attrs),
+                              $desc);
 
             $output = apply_filters("Metabox/render_field/output", $output, $field, $this, $post);
             $output = apply_filters("Metabox/render_field/{$field["type"]}", $output, $field, $this, $post);

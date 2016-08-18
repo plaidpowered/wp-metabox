@@ -27,7 +27,7 @@ function select_template($template, $field, $post, $value)
 
     return '
         <p class="field">
-            <label for="%1$s">%3$s</label>
+            '.Metabox::FIELD_TEMPLATE_LABEL.'
             <select id="%1$s" name="%2$s" class="widefat">'.$template.'</select>
         </p>';
 

@@ -138,21 +138,27 @@ class MetaBox {
 
             $field_attrs = empty($field["attrs"]) ? array() : $field["attrs"];
 
+            $multi = !empty($field["multiple"]);
 
-            if (is_array($value))
-                $value = current($value);
-            $output = sprintf($template,
-                              $id,
-                              $id,
-                              $field["label"],
-                              $value,
-                              self::split_to_input($field_attrs));
+            //if (is_array($value) && !$multi)
+            //    $value = current($value);
 
-            $output = apply_filters("MetaBox/render_field/output", $output, $field, $this, $post);
-            $output = apply_filters("MetaBox/render_field/{$field["type"]}", $output, $field, $this, $post);
-            $output = apply_filters("MetaBox/render_field/{$this->id}/$name", $output, $field, $this, $post);
+            for($i = 0; $i < count($value) || $i < 1; $i++) {
 
-            $formoutput .= $output;
+                $output = sprintf($template,
+                                  $id . "_$i",
+                                  $id . "[$i]",
+                                  $field["label"],
+                                  $value[$i],
+                                  self::split_to_input($field_attrs));
+
+                $output = apply_filters("MetaBox/render_field/output", $output, $field, $this, $post);
+                $output = apply_filters("MetaBox/render_field/{$field["type"]}", $output, $field, $this, $post);
+                $output = apply_filters("MetaBox/render_field/{$this->id}/$name", $output, $field, $this, $post);
+
+                $formoutput .= $output;
+
+            }
 
         }
 
@@ -230,22 +236,30 @@ class MetaBox {
 
             $filter = apply_filters("MetaBox/field_filter/{$field["type"]}", FILTER_SANITIZE_STRING);
 
-            $value = isset($_POST[$id]) ? $_POST[$id] : "";
+            $values = isset($_POST[$id]) ? $_POST[$id] : "";
+            if (!is_array($values))
+                $values = array($values);
 
-            if ($filter!==false)
-                $value = filter_var($value, $filter);
+            delete_post_meta($post_id, $name);
+            foreach($values as $value)
+            {
 
-            $value = apply_filters("MetaBox/save_field", $value, $field, $this, $post_id);
-            $value = apply_filters("MetaBox/save_field/{$field["type"]}", $value, $field, $this, $post_id);
-            $value = apply_filters("MetaBox/save_field/{$this->id}/{$field["name"]}", $value, $field, $this, $post_id);
+                if ($filter!==false)
+                    $value = filter_var($value, $filter);
 
-            do_action("MetaBox/before_field_saved", $value, $field, $this, $post_id);
-            do_action("MetaBox/before_field_saved/{$field["type"]}", $value, $field, $this, $post_id);
+                $value = apply_filters("MetaBox/save_field", $value, $field, $this, $post_id);
+                $value = apply_filters("MetaBox/save_field/{$field["type"]}", $value, $field, $this, $post_id);
+                $value = apply_filters("MetaBox/save_field/{$this->id}/{$field["name"]}", $value, $field, $this, $post_id);
 
-            $meta_id = update_post_meta($post_id, $name, $value);
+                do_action("MetaBox/before_field_saved", $value, $field, $this, $post_id);
+                do_action("MetaBox/before_field_saved/{$field["type"]}", $value, $field, $this, $post_id);
 
-            do_action("MetaBox/after_field_saved", $meta_id, $value, $field, $this, $post_id);
-            do_action("MetaBox/after_field_saved-$name", $value, $post_id, $field, $this, $meta_id);
+                $meta_id = add_post_meta($post_id, $name, $value);
+
+                do_action("MetaBox/after_field_saved", $meta_id, $value, $field, $this, $post_id);
+                do_action("MetaBox/after_field_saved-$name", $value, $post_id, $field, $this, $meta_id);
+
+            }
 
         }
 

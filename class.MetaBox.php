@@ -1,24 +1,25 @@
 <?php
 
 /*******************************************
-   MetaBox
-   desc: Build metaboxes really fast
+   Metabox
+   desc: Build Wordpress metaboxes really fast
  *******************************************/
 
-namespace OUW\MetaBox;
+namespace WP_Metabox;
 
-class MetaBox {
+class Metabox {
 
     private $fields, $post_types, $perms;
     public $id, $title, $atts;
 
-    const FIELD_TEMPLATE  = '<p class="field">%s</p>';
+    const FIELD_TEMPLATE       = '<p class="field">%s</p>';
     const FIELD_TEMPLATE_LABEL = '<label for="%1$s">%3$s</label>';
     const FIELD_TEMPLATE_INPUT = '<input id="%1$s" name="%2$s" value="%4$s" %5$s>';
+    const FIELD_TEMPLATE_DESC  = '<small>%6$s</small>';
 
     public function __construct($id, $title, $atts = array()) {
 
-        $abort = apply_filters("MetaBox/disable_metabox/$id", false);
+        $abort = apply_filters("Metabox/disable_metabox/$id", false);
         if ($abort)
             return false;
 
@@ -83,8 +84,8 @@ class MetaBox {
         }
 
 
-        $newfield = \apply_filters("MetaBox/add_field/{$newfield["type"]}", $newfield);
-        $newfield = \apply_filters("MetaBox/add_field/$name", $newfield);
+        $newfield = \apply_filters("Metabox/add_field/{$newfield["type"]}", $newfield);
+        $newfield = \apply_filters("Metabox/add_field/$name", $newfield);
 
         $this->fields[$name] = $newfield;
 
@@ -92,7 +93,7 @@ class MetaBox {
 
     public function build() {
 
-        \do_action("MetaBox/before_registration", $this);
+        \do_action("Metabox/before_registration", $this);
 
         foreach ($this->post_types as $post_type)
         {
@@ -106,7 +107,7 @@ class MetaBox {
             );
         }
 
-        \do_action("MetaBox/after_registration", $this);
+        \do_action("Metabox/after_registration", $this);
 
     }
 
@@ -114,7 +115,7 @@ class MetaBox {
 
         $formoutput = "";
 
-        \do_action("MetaBox/before_render", $this, $post);
+        \do_action("Metabox/before_render", $this, $post);
 
         if (isset($this->atts["description"]))
             echo '<p>' . $this->atts["description"] . '</p>';
@@ -123,18 +124,24 @@ class MetaBox {
 
         foreach($this->fields as $name => $field)
         {
-            $field = \apply_filters("MetaBox/render_field/properties", $field, $post);
+            $field = \apply_filters("Metabox/render_field/properties", $field, $post);
             $id = $this->field_name($field);
 
             $value = isset($meta[$name]) ? $meta[$name] : $field["value"];
-            $value = \apply_filters("MetaBox/render_field/{$field["type"]}/value", $value, $field, $post);
+            $value = \apply_filters("Metabox/render_field/{$field["type"]}/value", $value, $field, $post);
+
+            $desc = isset($field["attrs"]["desc"]) ? $field["attrs"]["desc"] : "";
+            $desc = \apply_filters("Metabox/render_field/{$field["type"]}/desc", $desc, $field, $post);
 
             $template = self::FIELD_TEMPLATE;
             $template_inside = self::FIELD_TEMPLATE_INPUT;
             if (!isset($field["attrs"]["label"]) || $field["attrs"]["label"] !== false)
                 $template_inside = self::FIELD_TEMPLATE_LABEL . $template_inside;
+            if (!isset($field["attrs"]["desc"]) || $field["attrs"]["desc"] !== false)
+                $template_inside .= self::FIELD_TEMPLATE_DESC;
+
             $template = sprintf(self::FIELD_TEMPLATE, $template_inside);
-            $template = \apply_filters("MetaBox/render_field/{$field["type"]}/template", $template, $field, $post, $value);
+            $template = \apply_filters("Metabox/render_field/{$field["type"]}/template", $template, $field, $post, $value);
 
             $field_attrs = empty($field["attrs"]) ? array() : $field["attrs"];
 
@@ -162,14 +169,14 @@ class MetaBox {
 
         }
 
-        $formoutput .= wp_nonce_field("MetaBox/save", "{$this->id}_nonce", true, false);
+        $formoutput .= wp_nonce_field("Metabox/save", "{$this->id}_nonce", true, false);
 
-        $formoutput = apply_filters("MetaBox/form_output/{$this->id}", $formoutput, $this, $post);
-        $formoutput = apply_filters("MetaBox/form_output", $formoutput, $this, $post);
+        $formoutput = apply_filters("Metabox/form_output/{$this->id}", $formoutput, $this, $post);
+        $formoutput = apply_filters("Metabox/form_output", $formoutput, $this, $post);
 
         echo $formoutput;
 
-        \do_action("MetaBox/after_render", $this, $post);
+        \do_action("Metabox/after_render", $this, $post);
 
 
     }
@@ -203,7 +210,7 @@ class MetaBox {
 
     private function field_name($field)
     {
-        return apply_filters("MetaBox/field_name/{$this->id}/{$field["name"]}", $this->id . "-" . $field["name"], $field, $this);
+        return apply_filters("Metabox/field_name/{$this->id}/{$field["name"]}", $this->id . "-" . $field["name"], $field, $this);
     }
 
     public function save($post_id)
@@ -217,7 +224,7 @@ class MetaBox {
         if (!isset($_POST["{$this->id}_nonce"]))
             return;
 
-        if (!wp_verify_nonce($_POST["{$this->id}_nonce"], "MetaBox/save"))
+        if (!wp_verify_nonce($_POST["{$this->id}_nonce"], "Metabox/save"))
             return;
 
         $post = get_post($post_id);
@@ -234,7 +241,7 @@ class MetaBox {
             //if (!isset($_POST[$id]))
             //    continue;
 
-            $filter = apply_filters("MetaBox/field_filter/{$field["type"]}", FILTER_SANITIZE_STRING);
+            $filter = apply_filters("Metabox/field_filter/{$field["type"]}", FILTER_SANITIZE_STRING);
 
             $values = isset($_POST[$id]) ? $_POST[$id] : "";
             if (!is_array($values))

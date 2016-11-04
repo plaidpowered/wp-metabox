@@ -1,6 +1,6 @@
 <?php
 
-namespace OUW\MetaBox;
+namespace WP_Metabox;
 
 function select_template($template, $field, $post, $value)
 {
@@ -27,9 +27,9 @@ function select_template($template, $field, $post, $value)
 
     return '
         <p class="field">
-            <label for="%1$s">%3$s</label>
+            '.Metabox::FIELD_TEMPLATE_LABEL.'
             <select id="%1$s" name="%2$s" class="widefat">'.$template.'</select>
         </p>';
 
 }
-\add_filter("MetaBox/render_field/select/template", __NAMESPACE__.'\select_template', 9, 4);
+\add_filter("Metabox/render_field/select/template", __NAMESPACE__.'\select_template', 9, 4);

@@ -1,6 +1,6 @@
 <?php
 
-namespace OUW\MetaBox;
+namespace WP_Metabox;
 
 function label_template($template) {
 
@@ -10,9 +10,9 @@ function label_template($template) {
         </p>';
 
 }
-\add_filter("MetaBox/render_field/label/template", __NAMESPACE__."\label_template", 9, 1);
+\add_filter("Metabox/render_field/label/template", __NAMESPACE__."\label_template", 9, 1);
 
-\add_filter("MetaBox/render_field/label/value", function ($value, $field) {
+\add_filter("Metabox/render_field/label/value", function ($value, $field) {
 
     return $field["value"];
 
@@ -23,4 +23,4 @@ function label_save_value($value) {
     return "";
 
 }
-\add_filter("MetaBox/save_field/label", __NAMESPACE__."\label_save_value", 9, 1);
+\add_filter("Metabox/save_field/label", __NAMESPACE__."\label_save_value", 9, 1);

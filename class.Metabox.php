@@ -12,7 +12,7 @@ class Metabox {
     private $fields, $post_types, $perms;
     public $id, $title, $atts;
 
-    const FIELD_MULTI_TEMPLATE = '<div class="multifield">%s</div>';
+    const FIELD_MULTI_TEMPLATE = '<div class="multifield" data-count="%d">%s<button data-action="add" class="add-field"><span class="dashicons dashicons-plus-alt"></span></div>';
     const FIELD_TEMPLATE       = '<p class="field">%s</p>';
     const FIELD_TEMPLATE_LABEL = '<label for="%1$s">%3$s</label>';
     const FIELD_TEMPLATE_INPUT = '<input id="%1$s" name="%2$s" value="%4$s" %5$s>';
@@ -60,11 +60,12 @@ class Metabox {
     public function add_field($name, $label, $attrs = array()) {
 
         $newfield = array(
-            "label" => $label,
-            "name" => $name,
-            "type" => "text",
-            "attrs" => $attrs,
-            "value" => ""
+            "label"     => $label,
+            "name"      => $name,
+            "type"      => "text",
+            "attrs"     => $attrs,
+            "value"     => "",
+            "multiple"  => false
         );
 
         if (isset($newfield["attrs"]["type"]))
@@ -82,6 +83,12 @@ class Metabox {
         if (!isset($newfield["attrs"]["class"]))
         {
             $newfield["attrs"]["class"] = "widefat";
+        }
+
+        if (isset($newfield["attrs"]["multiple"]))
+        {
+            $newfield["multiple"] = $newfield["attrs"]["multiple"];
+            unset($newfield["attrs"]["multiple"]);
         }
 
 
@@ -156,6 +163,8 @@ class Metabox {
             //if (is_array($value))
             //    $value = current($value);
 
+            $fieldoutput = '';
+
             for($i = 0; $i < count($value) || $i < 1; $i++) {
 
                 $output = sprintf($template,
@@ -170,16 +179,19 @@ class Metabox {
                 $output = apply_filters("Metabox/render_field/{$field["type"]}", $output, $field, $this, $post);
                 $output = apply_filters("Metabox/render_field/{$this->id}/$name", $output, $field, $this, $post);
 
-                $formoutput .= $output;
+                $fieldoutput .= $output;
 
             }
 
             if ($multi)
             {
                 if (!isset($field["attrs"]["desc"]) || $field["attrs"]["desc"] !== false)
-                    $template .= sprintf(self::FIELD_TEMPLATE_DESC, $desc);
-                $template = sprintf(self::FIELD_MULTITEMPLATE, $template);
+                    $fieldoutput .= sprintf(self::FIELD_TEMPLATE_DESC, $desc);
+
+                $fieldoutput = sprintf(self::FIELD_MULTI_TEMPLATE, count($value), $fieldoutput);
             }
+
+            $formoutput .= $fieldoutput;
 
         }
 

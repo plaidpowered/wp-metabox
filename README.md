@@ -91,7 +91,7 @@ That's all! See below for the field types available by default.
     A label with no input field, useful for headings. All parameters will be ignored.
 
 **media**  
-    Attaches posts from the Media library to the post. **$label** will be used for the "Add media" button label, does not support the **multiple** parameter.
+    Attaches posts from the Media library to the post. **$label** will be used for the "Add media" button label, does not support the **multiple** parameter, however, multiple objects can be selected from the media library popup.
 
 **select**  
     Show a dropdown of defined options. Use the **options** parameter to define options available, for example:

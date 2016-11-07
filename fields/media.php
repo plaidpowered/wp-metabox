@@ -2,14 +2,14 @@
 
 namespace WP_Metabox;
 
-function media_template($template, $field, $post, $value)
+function media_template($template, $value, $name, $id, $field)
 {
 
     wp_enqueue_media();
     wp_enqueue_script('metabox-media-selector', theme_url(__DIR__."/media.js"), array("jquery"), null, true);
 
     if (!empty($value)) {
-        $value = unserialize($value[0]);
+        $value = unserialize($value);
     }
 
     $attachments = "";
@@ -32,15 +32,15 @@ function media_template($template, $field, $post, $value)
 
     return '
         <div class="field">
-            <input type="hidden" name="%2$s" class="media-selection" value="'.$attachmentIds.'">
-            <button class="button button-primary media-selector" type="button">%3$s</button>
+            <input type="hidden" name="'.$name.'" class="media-selection" value="'.$attachmentIds.'">
+            <button class="button button-primary media-selector" type="button">'.$field["label"].'</button>
             <ul class="media-filenames">
             '.$attachments.'
             </ul>
         </div>';
 
 }
-\add_filter("Metabox/render_field/media/template", __NAMESPACE__.'\media_template', 9, 4);
+\add_filter("Metabox/render_field/media", __NAMESPACE__.'\media_template', 9, 5);
 
 function media_save_value($value)
 {
@@ -51,6 +51,8 @@ function media_save_value($value)
 
 }
 \add_filter("Metabox/save_field/media", __NAMESPACE__."\media_save_value", 9, 1);
+
+\add_filter("Metabox/multiples_allowed/media", "__return_false", 99);
 
 function get_post_media($post_id, $key, $size="thumbnail", $attrs=array())
 {

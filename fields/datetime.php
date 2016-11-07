@@ -30,13 +30,13 @@ function datetime_format($datetime, $datef="F j", $timef="h:i a")
     return $date;
 }
 
-function datetime_template($template, $field, $post, $value)
+add_filter("Metabox/render_field/datetime", __NAMESPACE__."\datetime_render", 9, 2);
+
+function datetime_render($output, $value)
 {
-
-
     if (!empty($value))
     {
-        list($date, $time) = datetime_convert($value[0]);
+        list($date, $time) = datetime_convert($value);
     }
     else
     {
@@ -44,15 +44,23 @@ function datetime_template($template, $field, $post, $value)
         $time = "";
     }
 
+    $output = str_replace("{date}", $date, $output);
+    $output = str_replace("{time}", $time, $output);
+
+    return $output;
+}
+
+function datetime_template($template)
+{
     return '
         <p class="field">
             '.Metabox::FIELD_TEMPLATE_LABEL.'
-            <input id="%1$s_date" name="%2$s[date]" type="date" class="widefat" value="'.$date.'" placeholder="Date">
-            <input id="%1$s_time" name="%2$s[time]" type="time" class="widefat" value="'.$time.'" placeholder="Time">
+            <input id="%1$s_date" name="%2$s[date]" type="date" class="widefat" value="{date}" placeholder="Date">
+            <input id="%1$s_time" name="%2$s[time]" type="time" class="widefat" value="{time}" placeholder="Time">
         </p>';
 
 }
-\add_filter("Metabox/render_field/datetime/template", __NAMESPACE__."\datetime_template", 9, 4);
+\add_filter("Metabox/render_field/datetime/template", __NAMESPACE__."\datetime_template", 9, 1);
 
 function datetime_save_value($value)
 {

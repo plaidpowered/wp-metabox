@@ -2,9 +2,13 @@
 
 namespace WP_Metabox;
 
+
+\add_filter("Metabox/multiples_allowed/checkbox", "__return_false", 99);
+
+
 function checkbox_value($value) {
 
-    return !empty($value[0]) && $value[0] === "yes" ? 'checked="checked"' : '';
+    return !empty($value) && $value === "yes" ? 'checked="checked"' : '';
 
 }
 \add_filter("Metabox/render_field/checkbox/value", __NAMESPACE__."\checkbox_value", 9, 1);

@@ -2,6 +2,8 @@
 
 namespace WP_Metabox;
 
+\add_filter("Metabox/multiples_allowed/taxonomy", "__return_false", 99);
+
 function taxonomy_value($value)
 {
 
@@ -12,7 +14,7 @@ function taxonomy_value($value)
 
 function taxonomy_template($template, $field, $post)
 {
-    if (isset($field["attrs"]["multiple"]) && $field["attrs"]["multiple"] === false)
+    if (isset($field["multiple"]) && $field["multiple"] === false)
     {
         $my_terms = wp_get_object_terms($post->ID,
             $field["attrs"]["taxonomy"],
@@ -54,7 +56,7 @@ function taxonomy_template($template, $field, $post)
 function taxonomy_save_value($value, $field, $metabox, $post_id)
 {
 
-    if (isset($field["attrs"]["multiple"]) && $field["attrs"]["multiple"] === false)
+    if (isset($field["multiple"]) && $field["multiple"] === false)
     {
 
         $terms = empty($value) ? null : absint(filter_var($value, FILTER_SANITIZE_NUMBER_INT));

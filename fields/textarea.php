@@ -16,7 +16,7 @@ function textarea_template()
     return '
         <p class="field">
             '.Metabox::FIELD_TEMPLATE_LABEL.'
-            <textarea name="%2$s" id="%1$s" class="widefat">%4$s</textarea>
+            <textarea name="%2$s" id="%1$s" class="widefat" %5$s>%4$s</textarea>
         </p>';
 }
 \add_filter("Metabox/render_field/textarea/template", __NAMESPACE__.'\textarea_template', 9, 0);

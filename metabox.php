@@ -32,7 +32,7 @@ function autoload_folder($dir)
 function theme_url($path, $theme_dir=null)
 {
     if (is_null($theme_dir))
-        $theme_dir = THEME_DIR;
+        $theme_dir = get_template_directory();
 
     $path = str_replace($theme_dir, "", $path);
     $path = trim($path, "/");

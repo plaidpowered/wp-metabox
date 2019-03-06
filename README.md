@@ -1,3 +1,5 @@
+**THIS IS OLD, I MAY UPDATE IT SIGNIFICANTLY IN THE FUTURE BUT AS-IS, MAYBE STAY AWAY**
+
 # Wordpress Metabox Utility
 
 Requires: PHP 5.5 or higher  
